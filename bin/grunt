@@ -26,16 +26,19 @@ if ('completion' in options) {
 }
 
 try {
-  gruntpath = resolve('grunt', {basedir: basedir});
+  gruntpath = resolve('grunt', {
+    paths: process.env.NODE_PATH || [],
+    basedir: process.cwd()
+  });
 } catch (ex) {
   gruntpath = findup('lib/grunt.js');
   // No grunt install found!
   if (!gruntpath) {
     if (options.version) { process.exit(); }
     if (options.help) { info.help(); }
-    info.fatal('Unable to find local grunt.', 99);
+    info.fatal('Unable to find grunt.', 99);
   }
 }
 
-// Everything looks good. Require local grunt and run it.
+// Everything looks good. Require grunt and run it.
 require(gruntpath).cli();
